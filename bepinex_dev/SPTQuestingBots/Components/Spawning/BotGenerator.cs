@@ -339,8 +339,8 @@ namespace SPTQuestingBots.Components.Spawning
             {
                 try
                 {
-                    GClass514 botProfileData = new GClass514(spawnSide, spawnType, botdifficulty, 0f, null);
-                    GClass513 botSpawnData = await GClass513.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
+                    GClass592 botProfileData = new GClass592(spawnSide, spawnType, botdifficulty, 0f, null);
+                    GClass591 botSpawnData = await GClass591.Create(botProfileData, ibotCreator, bots, botSpawnerClass);
 
                     botSpawnInfo = new Models.BotSpawnInfo(botSpawnData);
                 }
@@ -449,7 +449,8 @@ namespace SPTQuestingBots.Components.Spawning
             BotZone closestBotZone = botSpawnerClass.GetClosestZone(positions[0], out float dist);
             foreach (Vector3 position in positions)
             {
-                botSpawnInfo.Data.AddPosition(position);
+                var closestCorePoint = AICorePointHolder.GetClosest(position);
+                botSpawnInfo.Data.AddPosition(position, closestCorePoint.Id);
             }
 
             // In SPT-AKI 3.7.1, this is GClass732

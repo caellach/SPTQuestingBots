@@ -9,7 +9,7 @@ namespace SPTQuestingBots.Models
 {
     public class BotSpawnInfo
     {
-        public GClass513 Data { get; private set; }
+        public GClass591 Data { get; private set; }
         public Configuration.MinMaxConfig RaidETRangeToSpawn { get; private set; } = new Configuration.MinMaxConfig(0, double.MaxValue);
 
         private List<BotOwner> bots = new List<BotOwner>();
@@ -19,12 +19,12 @@ namespace SPTQuestingBots.Models
         public IReadOnlyCollection<BotOwner> SpawnedBots => bots.AsReadOnly();
         public int RemainingBotsToSpawn => Math.Max(0, Count - bots.Count);
 
-        public BotSpawnInfo(GClass513 data)
+        public BotSpawnInfo(GClass591 data)
         {
             Data = data;
         }
 
-        public BotSpawnInfo(GClass513 data, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data)
+        public BotSpawnInfo(GClass591 data, Configuration.MinMaxConfig raidETRangeToSpawn) : this(data)
         {
             RaidETRangeToSpawn = raidETRangeToSpawn;
         }

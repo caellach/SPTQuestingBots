@@ -10,6 +10,11 @@ using EFT.InventoryLogic;
 using EFT;
 using SPTQuestingBots.Controllers;
 
+using GridClass = GClass2499;
+using InventoryHelperClass = GClass2774;
+using ItemAddressExClass = GClass2769;
+
+
 namespace SPTQuestingBots.Helpers
 {
     public static class ItemHelpers
@@ -45,7 +50,7 @@ namespace SPTQuestingBots.Helpers
                 }
 
                 // Initialize the transation to transfer the key to the bot
-                GStruct375<GClass2593> moveResult = GClass2585.Add(item, locationForItem, inventoryControllerClass, true);
+                GStruct414<GClass2782> moveResult = InventoryHelperClass.Add(item, locationForItem, inventoryControllerClass, true);
                 if (!moveResult.Succeeded)
                 {
                     LoggingController.LogError("Cannot move key " + item.LocalizedName() + " to inventory of " + botOwner.GetText());
@@ -88,7 +93,7 @@ namespace SPTQuestingBots.Helpers
 
                 // Search through all grids in the equipment slot
                 SearchableItemClass equipmentSlot = botInventoryController.Inventory.Equipment.GetSlot(slot).ContainedItem as SearchableItemClass;
-                foreach (GClass2318 grid in (equipmentSlot?.Grids ?? (new GClass2318[0])))
+                foreach (GridClass grid in (equipmentSlot?.Grids ?? (new GridClass[0])))
                 {
                     //LoggingController.LogInfo("Checking grid " + grid.ID + " (" + grid.GridWidth.Value + "x" + grid.GridHeight.Value + ") in " + slot.ToString() + " for " + BotOwner.GetText() + "...");
 
@@ -98,7 +103,7 @@ namespace SPTQuestingBots.Helpers
                     {
                         LoggingController.LogInfo(botOwner.GetText() + " will receive " + item.LocalizedName() + " in its " + slot.ToString() + "...");
 
-                        return new GClass2580(grid, locationInGrid);
+                        return new ItemAddressExClass(grid, locationInGrid);
                     }
                 }
             }
@@ -128,7 +133,7 @@ namespace SPTQuestingBots.Helpers
             return false;
         }
 
-        public static DependencyGraph<IEasyBundle>.GClass3114 LoadBundle(this Item item)
+        public static DependencyGraph<IEasyBundle>.GClass3396 LoadBundle(this Item item)
         {
             try
             {

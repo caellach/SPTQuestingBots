@@ -12,6 +12,7 @@ using EFT.Interactive;
 using HarmonyLib;
 using SPTQuestingBots.Configuration;
 using SPTQuestingBots.Controllers;
+using SPTQuestingBots.Helpers;
 using UnityEngine;
 
 namespace SPTQuestingBots.BehaviorExtensions
@@ -19,7 +20,7 @@ namespace SPTQuestingBots.BehaviorExtensions
     public abstract class CustomLogicDelayedUpdate : CustomLogic
     {
         protected BotLogic.Objective.BotObjectiveManager ObjectiveManager { get; private set; }
-        protected GClass114 baseAction { get; private set; } = null;
+        protected GClass134 baseAction { get; private set; } = null;
         protected static int updateInterval { get; private set; } = 100;
 
         private PropertyInfo cornerIndexField = null;
@@ -27,7 +28,7 @@ namespace SPTQuestingBots.BehaviorExtensions
         private Stopwatch actionElapsedTime = new Stopwatch();
 
         // Find by CreateNode(BotLogicDecision type, BotOwner bot) -> case BotLogicDecision.simplePatrol -> private gclass object
-        private GClass288 baseSteeringLogic = new GClass288();
+        private GClass329 baseSteeringLogic = new GClass329();
 
         protected double ActionElpasedTime => actionElapsedTime.ElapsedMilliseconds / 1000.0;
 
@@ -69,7 +70,7 @@ namespace SPTQuestingBots.BehaviorExtensions
             actionElapsedTime.Restart();
         }
 
-        public void SetBaseAction(GClass114 _baseAction)
+        public void SetBaseAction(GClass134 _baseAction)
         {
             baseAction = _baseAction;
             baseAction.Awake();
@@ -151,7 +152,8 @@ namespace SPTQuestingBots.BehaviorExtensions
 
         public bool IsNearPathCorner(Configuration.DistanceAngleConfig maxDistanceMinAngle)
         {
-            if (BotOwner?.Mover?.CurPath == null)
+            var curPath = BotOwner.Mover.GetCurPath();
+            if (curPath == null)
             {
                 return false;
             }
@@ -162,15 +164,15 @@ namespace SPTQuestingBots.BehaviorExtensions
             }
 
             int currentCornerIndex = (int)cornerIndexField.GetValue(BotOwner.Mover);
-            if (currentCornerIndex == BotOwner.Mover.CurPath.Length - 1)
+            if (currentCornerIndex == curPath.Length - 1)
             {
                 return true;
             }
 
-            ObjectiveManager.LastCorner = BotOwner.Mover.CurPath[currentCornerIndex];
+            ObjectiveManager.LastCorner = curPath[currentCornerIndex];
 
-            Vector3 currentSegment = BotOwner.Mover.CurPath[currentCornerIndex] - BotOwner.Mover.CurPath[currentCornerIndex - 1];
-            Vector3 nextSegment = BotOwner.Mover.CurPath[currentCornerIndex + 1] - BotOwner.Mover.CurPath[currentCornerIndex];
+            Vector3 currentSegment = curPath[currentCornerIndex] - curPath[currentCornerIndex - 1];
+            Vector3 nextSegment = curPath[currentCornerIndex + 1] - curPath[currentCornerIndex];
             float cornerAngle = Vector3.Angle(currentSegment, nextSegment);
 
             if (cornerAngle >= maxDistanceMinAngle.Angle)
